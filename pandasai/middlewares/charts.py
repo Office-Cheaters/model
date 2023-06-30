@@ -19,5 +19,5 @@ class ChartsMiddleware(Middleware):
         """
 
         if "plt.show()" in code and "plt.close('all')" not in code:
-            code = code.replace("plt.show()", "plt.savefig('output/0.png')")
+            code = code.replace("plt.show()", "plt.show()\nplt.close('all')")
         return code

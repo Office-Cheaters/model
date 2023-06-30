@@ -42,6 +42,7 @@ import uuid
 import time
 from contextlib import redirect_stdout
 from typing import List, Optional, Union, Dict, Type
+import os
 
 import astor
 import pandas as pd
@@ -159,7 +160,7 @@ class PandasAI(Shortcuts):
         conversational=False,
         verbose=False,
         enforce_privacy=False,
-        save_charts=False,
+        save_charts=True,
         enable_cache=True,
         middlewares=None,
         custom_whitelisted_dependencies=None,
@@ -194,7 +195,8 @@ class PandasAI(Shortcuts):
         # noinspection PyArgumentList
         # https://stackoverflow.com/questions/61226587/pycharm-does-not-recognize-logging-basicconfig-handlers-argument
         if enable_logging:
-            handlers = [logging.FileHandler("pandasai.log")]
+            log_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pandasai.log")
+            handlers = [logging.FileHandler(log_file)]
         else:
             handlers = []
 

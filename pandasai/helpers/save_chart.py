@@ -65,8 +65,9 @@ def add_save_chart(code: str, folder_name: str, print_save_dir: bool = True) -> 
     """
 
     # define chart save directory
-    project_root = dirname(dirname(dirname(__file__)))
-    chart_save_dir = os.path.join(project_root, "exports", "charts", folder_name)
+    project_root = dirname(dirname(dirname(dirname(__file__))))      # larger than model directory. 아마 DataBase의 위치가 될 것!!
+    
+    chart_save_dir = os.path.join(project_root, "output", folder_name)
 
     tree = ast.parse(code)
 
