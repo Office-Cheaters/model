@@ -19,7 +19,7 @@ class Model:
         self.llm = OpenAI(api_token = api_token)
 
         # Load llm to PandasAI
-        self.pandas_ai = PandasAI(self.llm)
+        self.pandas_ai = PandasAI(self.llm, save_charts=True, verbose=True)
 
     def request(self, data_file_name, prompt):
         
