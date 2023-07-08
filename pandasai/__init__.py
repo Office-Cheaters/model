@@ -404,8 +404,16 @@ class PandasAI(Shortcuts):
                 self.log(f"Conversational answer: {answer}")
 
             self.log(f"Executed in: {time.time() - self._start_time}s")
+            
+            # output dictionary form : {answer, uuid}
+            
+            output = dict(
+                answer = answer,
+                uuid = self._prompt_id
+                )
 
-            return answer
+            return output
+        
         except Exception as exception:
             self.last_error = str(exception)
             print(exception)

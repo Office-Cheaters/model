@@ -31,6 +31,5 @@ class Model:
 
         # Print result and type
         print("Result : \n", result, "\n")
-        print("Type : \n", type(result), "\n")
         
         return result
