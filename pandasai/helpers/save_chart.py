@@ -89,7 +89,7 @@ def add_save_chart(code: str, folder_name: str, print_save_dir: bool = True) -> 
     new_body = []
     for node in tree.body:
         if compare_ast(node, ast.parse("plt.show()").body[0], ignore_args=True):
-            filename = "chart"
+            filename = "output"
             if show_count > 1:
                 filename += f"_{chr(counter)}"
                 counter += 1

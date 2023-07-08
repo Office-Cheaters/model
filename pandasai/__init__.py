@@ -207,6 +207,7 @@ class PandasAI(Shortcuts):
             format="%(asctime)s [%(levelname)s] %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
             handlers=handlers,
+            encoding='utf-8'
         )
         self._logger = logging.getLogger(__name__)
 
@@ -309,7 +310,7 @@ class PandasAI(Shortcuts):
 
         self._start_time = time.time()
 
-        self.log(f"Running PandasAI with {self._llm.type} LLM...")
+        self.log(f"[START] Running PandasAI with {self._llm.type} LLM...")
 
         self._prompt_id = str(uuid.uuid4())
         self.log(f"Prompt ID: {self._prompt_id}")
@@ -362,6 +363,17 @@ class PandasAI(Shortcuts):
                         generate_code_instruction,
                         prompt,
                     )
+                    
+                    self.log(
+                        f"""
+                            Prompt:
+                            ```
+                            {generate_code_instruction}
+                            {prompt}
+                            ```
+                        """
+                    )
+                    
 
                     self._original_instructions = {
                         "question": prompt,

@@ -28,8 +28,5 @@ class Model:
 
         # pandas_ai (data, prompt) 형태로 요청
         result = self.pandas_ai(df, prompt)
-
-        # Print result and type
-        print("Result : \n", result, "\n")
         
         return result
