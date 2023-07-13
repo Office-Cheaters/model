@@ -21,12 +21,35 @@ class Model:
         # Load llm to PandasAI
         self.pandas_ai = PandasAI(self.llm, save_charts=True, verbose=True)
 
-    def request(self, data_file_name, prompt):
-        
-        # 여기는 다양한 format file 처리할 수 있는 함수 만들 예정
-        df = from_excel(data_file_name)
+    def request(self, data_file_names, prompt):
+                
+        input = self.file_to_df(data_file_names)
 
         # pandas_ai (data, prompt) 형태로 요청
-        result = self.pandas_ai(df, prompt)
+        result = self.pandas_ai(input, prompt)
         
         return result
+    
+    
+    # file들을 df로 변환
+    def file_to_df(self, data_file_names):
+        
+        multiple: bool = isinstance(data_file_names, list)
+        
+        # 여기는 다양한 format file 처리할 수 있는 함수 만들 예정
+        
+        if multiple :
+            df_list = []
+            
+            for file in data_file_names :
+                # multilple
+                df = from_excel(file)
+                df_list.append(df)
+                
+            return df_list
+            
+            
+        else :
+            df = from_excel(data_file_names)
+            
+            return df

@@ -339,6 +339,16 @@ class PandasAI(Shortcuts):
                         multiple_dataframes_instruction(dataframes=heads),
                         prompt,
                     )
+                    
+                    self.log(
+                        f"""
+                            Prompt:
+                            ```
+                            {multiple_dataframes_instruction(dataframes=heads)}
+                            {prompt}
+                            ```
+                        """
+                    )
 
                     self._original_instructions = {
                         "question": prompt,
