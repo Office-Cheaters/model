@@ -25,8 +25,13 @@ This is the metadata of the dataframe:
 {df_head}.
 
 When asked about the data, your response should include a python code that describes the dataframe `df`.
-Using the provided dataframe, df, return the python code to get the answer to the following question:
+Using the provided dataframe, df, return the python code to get the answer to the following question
 """  # noqa: E501
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs, today_date=date.today())
+        
+        if kwargs['output_format'] != None:
+            self.text += f"\nSave the file 'output/{kwargs['prompt_id']}/output.{kwargs['output_format']}' :"
+        else :
+            self.text += ":"

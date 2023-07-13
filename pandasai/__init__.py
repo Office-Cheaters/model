@@ -68,6 +68,8 @@ from .prompts.generate_python_code import GeneratePythonCodePrompt
 from .prompts.generate_response import GenerateResponsePrompt
 from .prompts.multiple_dataframes import MultipleDataframesPrompt
 
+from .helpers.make_output_directory import make_output_directory
+
 
 def get_version():
     """
@@ -289,6 +291,7 @@ class PandasAI(Shortcuts):
         show_code: bool = False,
         anonymize_df: bool = True,
         use_error_correction_framework: bool = True,
+        output_format: str = None
     ) -> Union[str, pd.DataFrame]:
         """
         Run the PandasAI to make Dataframes Conversational.
@@ -368,7 +371,10 @@ class PandasAI(Shortcuts):
                         df_head=df_head,
                         num_rows=data_frame.shape[0],
                         num_columns=data_frame.shape[1],
+                        prompt_id=self._prompt_id,
+                        output_format=output_format
                     )
+                    
                     code = self._llm.generate_code(
                         generate_code_instruction,
                         prompt,
@@ -470,6 +476,7 @@ class PandasAI(Shortcuts):
         show_code: bool = False,
         anonymize_df: bool = True,
         use_error_correction_framework: bool = True,
+        output_format:str = None
     ) -> Union[str, pd.DataFrame]:
         """
         __call__ method of PandasAI class. It calls the `run` method.
@@ -493,6 +500,7 @@ class PandasAI(Shortcuts):
             show_code,
             anonymize_df,
             use_error_correction_framework,
+            output_format,
         )
 
     def _check_imports(self, node: Union[ast.Import, ast.ImportFrom]):
@@ -660,6 +668,9 @@ class PandasAI(Shortcuts):
         # Add save chart code
         if self._save_charts:
             code = add_save_chart(code, self._prompt_id, not self._verbose)
+        
+        # make directory to save output file
+        make_output_directory(self._prompt_id)
 
         # Get the code to run removing unsafe imports and df overwrites
         code_to_run = self._clean_code(code)

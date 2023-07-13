@@ -1,8 +1,8 @@
 from .pandasai import PandasAI
 import os
+import uuid
 
-# input data가 .xlsx로 끝나면 from_excel 함수 사용 (그 이외 format도 계속 추가해나갈 예정)
-from pandasai.helpers.from_excel import from_excel
+import pandas as pd
 
 class Model:
     def __init__(self):
@@ -21,18 +21,18 @@ class Model:
         # Load llm to PandasAI
         self.pandas_ai = PandasAI(self.llm, save_charts=True, verbose=True)
 
-    def request(self, data_file_names, prompt):
+    def request(self, data_file_names, prompt, output_format=None):
                 
-        input = self.file_to_df(data_file_names)
+        input = self.files_to_input(data_file_names)
 
         # pandas_ai (data, prompt) 형태로 요청
-        result = self.pandas_ai(input, prompt)
+        result = self.pandas_ai(input, prompt, output_format=output_format)
         
         return result
     
     
     # file들을 df로 변환
-    def file_to_df(self, data_file_names):
+    def files_to_input(self, data_file_names):
         
         multiple: bool = isinstance(data_file_names, list)
         
@@ -43,13 +43,52 @@ class Model:
             
             for file in data_file_names :
                 # multilple
-                df = from_excel(file)
+                df = self.file_to_df(file)
                 df_list.append(df)
                 
             return df_list
             
             
         else :
-            df = from_excel(data_file_names)
+            df = self.file_to_df(data_file_names)
             
             return df
+        
+    def file_to_df(self, file_name):
+        
+        ext = os.path.splitext(file_name)[1]
+        # ('data_name', '.xlsx')
+
+        file_format = {
+            ".csv": pd.read_csv,
+            ".xls": pd.read_excel,
+            ".xlsx": pd.read_excel,
+            ".xlsm": pd.read_excel,
+            ".xlsb": pd.read_excel,
+            ".json": pd.read_json,
+            ".html": pd.read_html,
+            ".sql": pd.read_sql,
+            ".feather": pd.read_feather,
+            ".parquet": pd.read_parquet,
+            ".dta": pd.read_stata,
+            ".sas7bdat": pd.read_sas,
+            ".h5": pd.read_hdf,
+            ".hdf5": pd.read_hdf,
+            ".pkl": pd.read_pickle,
+            ".pickle": pd.read_pickle,
+            ".gbq": pd.read_gbq,
+            ".orc": pd.read_orc,
+            ".xpt": pd.read_sas,
+            ".sav": pd.read_spss,
+            ".gz": pd.read_csv,
+            ".zip": pd.read_csv,
+            ".bz2": pd.read_csv,
+            ".xz": pd.read_csv,
+            ".txt": pd.read_csv,
+            ".xml": pd.read_xml,
+        }
+        
+        assert ext in file_format, "Unsupported file format."
+        
+        df = file_format[ext](file_name)
+        return df

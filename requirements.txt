@@ -64,4 +64,3 @@ pandas
 IPython
 openai
 pandasai
-openpyxl
