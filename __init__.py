@@ -5,7 +5,7 @@ import uuid
 import pandas as pd
 
 class Model:
-    def __init__(self):
+    def __init__(self, private = False):
         
         # 보안을 위해 api_key.txt는 따로 보관
         api_key_file = os.path.join(os.path.dirname(__file__), "api_key.txt")
@@ -19,7 +19,7 @@ class Model:
         self.llm = OpenAI(api_token = api_token)
 
         # Load llm to PandasAI
-        self.pandas_ai = PandasAI(self.llm, save_charts=True, verbose=True)
+        self.pandas_ai = PandasAI(self.llm, save_charts=True, verbose=True, enforce_privacy = private)
 
     def request(self, data_file_names, prompt, output_format=None):
                 
